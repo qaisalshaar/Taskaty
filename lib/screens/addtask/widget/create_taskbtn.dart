@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../core/utilities/app_color.dart';
 import '../../../core/utilities/app_textstyle.dart';
+import '../../../core/widget/custom_btn.dart';
 
 class CreatetaskBtn extends StatelessWidget {
-  const CreatetaskBtn({super.key});
+  final void Function()? onTap;
+  const CreatetaskBtn({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -65,29 +67,13 @@ class CreatetaskBtn extends StatelessWidget {
             ],
           ),
         ),
-        InkWell(
-          onTap: () {
-            // context.push(AddTask());
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColor.mainColor,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                Text('Create Task', style: AppTextStyle.fontStyle10white),
-              ],
-            ),
-          ),
-        ),
+
+
+        // CustomBtn(
+        //   title: 'Create Task',
+        //  // icon:  Icons.add,
+        //   onTap: onTap,
+        // ),
       ],
     );
   }

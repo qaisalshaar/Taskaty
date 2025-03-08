@@ -7,8 +7,9 @@ class StartEndTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Container(
 
+      child: Row(children: [
         CustomTextForm(
           onTap: (){
 
@@ -17,22 +18,24 @@ class StartEndTime extends StatelessWidget {
 
           title: 'Start Time',
           hintText: '2:30 AM',
-      suffixIcon: Icon(Icons.arrow_drop_down),
+          suffixIcon: Icon(Icons.arrow_drop_down),
         ),
 
-      SizedBox(width: 25,),
+        SizedBox(width: 25,),
 
-      CustomTextForm(
-        onTap: (){
+        CustomTextForm(
+          onTap: (){
 
 
-        },
+          },
 
-        title: 'End Time',
-        hintText: '2:45 PM',
-        suffixIcon: Icon(Icons.arrow_drop_down),
-      ),
+          title: 'End Time',
+          hintText: '2:45 PM',
+          suffixIcon: Icon(Icons.arrow_drop_down),
+        ),
 
-    ]);
+      ],),
+
+    );
   }
 }

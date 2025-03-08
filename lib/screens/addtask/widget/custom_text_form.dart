@@ -5,12 +5,16 @@ import '../../../core/utilities/app_textstyle.dart';
 class CustomTextForm extends StatelessWidget {
   final String title;
   final String hintText;
-
+final bool readOnly;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final String? Function(String?)? validator;
+ // final String? Function(String?)? validator;
 
   final void Function()? onTap;
-  const CustomTextForm({super.key, required this.title, required this.hintText, this.suffixIcon, this.prefixIcon, this.onTap});
+
+  final TextEditingController? controller;
+  const CustomTextForm({super.key, required this.title, required this.hintText, this.suffixIcon, this.prefixIcon, this.onTap, required this.readOnly, this.validator, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,10 @@ class CustomTextForm extends StatelessWidget {
           height: 5,
         ),
         TextFormField(
+          controller:controller ,
+          // validator: (value) => value!.isEmpty ? 'Enter $title' : null,
+          validator: validator,
+          readOnly: readOnly,
           onTap: onTap,
           decoration: InputDecoration(
 

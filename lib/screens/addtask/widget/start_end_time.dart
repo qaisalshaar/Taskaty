@@ -11,6 +11,7 @@ class StartEndTime extends StatelessWidget {
 
       child: Row(children: [
         CustomTextForm(
+          readOnly: true,
           onTap: (){
 
 
@@ -24,6 +25,7 @@ class StartEndTime extends StatelessWidget {
         SizedBox(width: 25,),
 
         CustomTextForm(
+          readOnly: true,
           onTap: (){
 
 

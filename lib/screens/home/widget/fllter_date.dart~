@@ -61,7 +61,7 @@ class DaysContainer extends StatelessWidget {
           Text(
             'Mon',
             style: AppTextStyle.fontStyle10white.copyWith(
-              color: isSelected ? Colors.white : Colors.black,fontSize: 15
+              color: isSelected ? Colors.white : Colors.black,fontSize: 18
             ),
           ),
         ],

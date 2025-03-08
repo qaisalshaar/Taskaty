@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskatykais/core/hellpers/extensions.dart';
 import 'package:taskatykais/core/utilities/app_color.dart';
 import 'package:taskatykais/core/utilities/app_textstyle.dart';
-
+import '../../../core/widget/custom_btn.dart';
 import '../../addtask/add_task_screen.dart';
 
 class DateAddBtn extends StatelessWidget {
@@ -10,34 +10,26 @@ class DateAddBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Expanded(child: Text('October 30 , 2025 \nToday',style: AppTextStyle.fontStyle20boldgrey,)),
-   InkWell(
-     onTap: (){
-
-       context.push(AddTask());
-
-     },
-     child: Container(
-       // width: 60,
-       // height: 60,
-       padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-       decoration: BoxDecoration(
-          color: AppColor.mainColor,
-         shape:BoxShape.rectangle,borderRadius: BorderRadius.circular(10),
-       ),
-      child: Row(
-
-        children: [
-          Icon(Icons.add,color: Colors.white,size: 18,),
-          Text('Add Task',style: AppTextStyle.fontStyle10white),
-
-        ],
-      ),
-
-     ),
-   )
-
-    ]);
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            'October 30 , 2025 \nToday',
+            style: AppTextStyle.fontStyle20boldgrey,
+          ),
+        ),
+        SizedBox(width: 8), // Add some spacing between text and button
+        SizedBox( // Constrain the button's width
+          width: 125, // Adjust this value to your desired width
+          child: CustomBtn(
+            title: 'Add Task',
+            icon: Icons.add,
+            onTap: () {
+              context.push(AddTaskScreen());
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

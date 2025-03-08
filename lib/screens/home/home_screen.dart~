@@ -31,10 +31,10 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-          //  TaskListView(),
+            TaskListView(),
             SizedBox(
               height: 30,),
-           false? TaskListView(): EmptyTaskList(),
+           true? TaskListView(): EmptyTaskList(),
           ],
         ),
       )),
