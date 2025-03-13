@@ -23,6 +23,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final FocusNode _focusNode = FocusNode(); // Add FocusNode
   var formKey = GlobalKey<FormState>();
 
+
+ bool switchValue = true;
   UploadFromCamera() async {
     imageFile = await picker.pickImage(source: ImageSource.camera);
   }
@@ -61,6 +63,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+                // Switch(value:switchValue, onChanged: (value){
+                //   {
+                //     setState(() {
+                //       switchValue = value;
+                //     });
+                //   }
+//                 // }),
+// Checkbox(value: switchValue, onChanged: (value){
+//     setState(() {
+//           switchValue = value?? false;
+//         });
+//
+// }),
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(

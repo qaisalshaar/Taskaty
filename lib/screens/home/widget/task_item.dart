@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:taskatykais/core/models/task_model.dart';
 import 'package:taskatykais/core/utilities/app_color.dart';
 import '../../../core/utilities/app_textstyle.dart';
 
 class TaskItem extends StatelessWidget {
-  const TaskItem({super.key});
+final  TaskModel task;
+
+  const TaskItem({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +14,7 @@ class TaskItem extends StatelessWidget {
       padding: EdgeInsets.all(12),
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: AppColor.mainColor,
+        color: task.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(children: [
@@ -20,7 +23,7 @@ class TaskItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Flutter Task-1 oooooooooooooooooooewtewtewtewtwetoooojhmcgchgmccc',
+               task.title,
                 style: AppTextStyle.fontStyle10white,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -38,7 +41,7 @@ class TaskItem extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  '10:00 AM',
+                 '${task.startTime} - ${task.endTime}',
                   style: AppTextStyle.fontStyle10white,
                 ),
               ]),
@@ -46,7 +49,14 @@ class TaskItem extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                'I Will Do This Task',
+                task.noteDescription,
+                style: AppTextStyle.fontStyle10white,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                task.date,
                 style: AppTextStyle.fontStyle10white,
               ),
             ],
@@ -64,7 +74,7 @@ class TaskItem extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8.0),
           child: RotatedBox(
             quarterTurns: 3, // Rotates the text 90 degrees clockwise
-            child: Text('To Do', style: AppTextStyle.fontStyle10white),
+            child: Text(task.isCompleted?'Completed':'To Do', style: AppTextStyle.fontStyle10white),
           ),
         ),
       ]),

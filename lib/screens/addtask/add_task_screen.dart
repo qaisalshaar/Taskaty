@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:taskatykais/core/hellpers/extensions.dart';
 import 'package:taskatykais/core/utilities/app_textstyle.dart';
 import 'package:taskatykais/screens/home/home_screen.dart';
 
+import '../../core/models/task_maneger.dart';
+import '../../core/models/task_model.dart';
 import '../../core/widget/custom_btn.dart';
 import '../home/widget/date_and_addbtn.dart';
 import 'widget/add_task_appbar.dart';
@@ -11,13 +14,39 @@ import 'widget/create_taskbtn.dart';
 import 'widget/custom_text_form.dart';
 import 'widget/start_end_time.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({super.key,});
+class AddTaskScreen extends StatefulWidget {
+  AddTaskScreen({
+    super.key,
+  });
 
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
   final titleController = TextEditingController();
+
+  final noteController = TextEditingController();
+
+  final dateController = TextEditingController();
+
+  final startTimeController = TextEditingController();
+
+  final endTimeController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
 
+  TaskManeger maneger = TaskManeger.maneger;
+
+  int selectedColorIndex = -1;
+
+  void updateSelectedIndexColor(int index) {
+    setState(() {
+      selectedColorIndex = index;
+    });
+  }
+
+  // Store the selected color index
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +69,12 @@ class AddTaskScreen extends StatelessWidget {
                     //   return 'Enter $titleController';
                     // }
 
-                    if (value?.isEmpty??true) {
+                    if (value?.isEmpty ?? true) {
                       return 'Enter Title';
                     }
-
                   },
                   readOnly: false,
-                 // title: 'Title',
+                  // title: 'Title',
                   hintText: 'Enter a title',
                   prefixIcon: Icon(
                     Icons.text_fields,
@@ -54,6 +82,12 @@ class AddTaskScreen extends StatelessWidget {
                   ),
                 ),
                 CustomTextForm(
+                  controller: noteController,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Please Enter Note';
+                    }
+                  },
                   readOnly: false,
                   prefixIcon: Icon(
                     Icons.note,
@@ -63,6 +97,13 @@ class AddTaskScreen extends StatelessWidget {
                   hintText: 'Enter a note here',
                 ),
                 CustomTextForm(
+
+                  controller: dateController,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Please Enter Date';
+                    }
+                  },
                   readOnly: false,
                   onTap: () {
                     //  print('onTap onTap onTap onTaponTap');
@@ -71,11 +112,19 @@ class AddTaskScreen extends StatelessWidget {
                       //  initialDate: DateTime(1900),
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
-                    );
+                    ).then((selectedDate) {
+                      if (selectedDate != null) {
+                      //  dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+                      //  'yyyy-MM-dd'
+                        dateController.text =DateFormat('dd/MM/yyyy').format(selectedDate);
+
+
+                      }
+                    });
                   },
                   //  prefixIcon: Icon(Icons.date_range, color: Colors.grey),
                   title: 'Date',
-                  hintText: '12/12/2025',
+                  hintText: 'Select a date',
                   suffixIcon: Icon(Icons.date_range, color: Colors.grey),
                 ),
                 Row(
@@ -84,13 +133,27 @@ class AddTaskScreen extends StatelessWidget {
                     Expanded(
                       // Use Expanded to make the CustomTextForm take up available space
                       child: CustomTextForm(
+                        controller: startTimeController,
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please Enter Start time';
+                          }
+                        },
                         readOnly: true,
                         onTap: () {
                           showTimePicker(
-                              context: context, initialTime: TimeOfDay.now());
+                              context: context, initialTime: TimeOfDay.now()).then((selectedTime) {
+                            if (selectedTime != null) {
+                              //  dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+                              //  'yyyy-MM-dd'
+                              startTimeController.text =selectedTime.format(context);
+
+
+                            }
+                          });
                         },
                         title: 'Start Time',
-                        hintText: '2:30 AM',
+                        hintText: 'select a time',
                         suffixIcon: Icon(Icons.date_range),
                       ),
                     ),
@@ -98,13 +161,27 @@ class AddTaskScreen extends StatelessWidget {
                     Expanded(
                       // Use Expanded to make the CustomTextForm take up available space
                       child: CustomTextForm(
+                        controller: endTimeController,
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please Enter End Time';
+                          }
+                        },
                         readOnly: true,
                         onTap: () {
                           showTimePicker(
-                              context: context, initialTime: TimeOfDay.now());
+                              context: context, initialTime: TimeOfDay.now()).then((selectedTime) {
+                            if (selectedTime != null) {
+                              //  dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+                              //  'yyyy-MM-dd'
+                              endTimeController.text =selectedTime.format(context);
+
+
+                            }
+                          });
                         },
                         title: 'End Time',
-                        hintText: '3:30 PM',
+                        hintText: 'select a time',
                         suffixIcon: Icon(Icons.date_range),
                       ),
                     ),
@@ -114,9 +191,46 @@ class AddTaskScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CreatetaskBtn(
+                  onColorSelected: (index) {
+                    // Receive the color index
+                    setState(() {
+                      selectedColorIndex = index;
+                    });
+                  },
                   onTap: () {
                     if (formKey.currentState!.validate()) {
-                      context.push(HomeScreen());
+
+                      if(selectedColorIndex==-1){
+                        showDialog(context: context, builder: (context)=>( AlertDialog(
+                          title: Center(child: Text('Select Color')),
+                          content: Text('Please select a color to add task'),
+                       actions: [
+                       TextButton(onPressed: (){
+                         Navigator.pop(context);
+                       }, child: Center(child: Text('OK')))
+                       ],
+                        )));
+                      }else{
+                        updateSelectedIndexColor(selectedColorIndex);
+                        maneger.addTask(TaskModel(
+                            title: titleController.text,
+                            noteDescription: noteController.text,
+                            date: dateController.text,
+                            startTime: startTimeController.text,
+                            endTime: endTimeController.text,
+                            backgroundColor: selectedColorIndex != -1
+                                ? availableColors[selectedColorIndex]
+                                : Colors.transparent,
+                            isCompleted: false));
+
+                        context.push(HomeScreen());
+
+
+
+                     }
+
+
+
                     }
                   },
                 ),

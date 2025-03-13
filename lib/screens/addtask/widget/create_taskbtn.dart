@@ -3,78 +3,111 @@ import '../../../core/utilities/app_color.dart';
 import '../../../core/utilities/app_textstyle.dart';
 import '../../../core/widget/custom_btn.dart';
 
-class CreatetaskBtn extends StatelessWidget {
+class CreatetaskBtn extends StatefulWidget {
   final void Function()? onTap;
-  const CreatetaskBtn({super.key, this.onTap});
+  final Function(int) onColorSelected; // Add this callback
+  const CreatetaskBtn({super.key, this.onTap, required this.onColorSelected,});
+
+  @override
+  State<CreatetaskBtn> createState() => _CreatetaskBtnState();
+}
+
+class _CreatetaskBtnState extends State<CreatetaskBtn> {
+ late int selectedIndexColor = -1;
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
         Expanded(
           child: Column( // Use Column here
-            crossAxisAlignment: CrossAxisAlignment.start, // Align to the start
+            crossAxisAlignment: CrossAxisAlignment.center, // Align to the start
             children: [
               Text(
-                'Color',
+                'Tasks Color',
                 style: AppTextStyle.fontStyle20boldblack,
               ),
               const SizedBox(height: 5), // Add vertical spacing
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start, // Align circles to the start
-                children: <Widget>[
-                  // Red Circle
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Stack(
-                      alignment: Alignment.center, // Center the icon
-                      children: [
-                        Icon(
-                          Icons.check , // Or any other arrow icon
-                          size: 12, // Adjust the size as needed
-                          color: Colors.white, // Or any color you want for the icon
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  // Blue Circle
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  // Green Circle
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.orange,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 100, // Increased height
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return SizedBox( // Removed Expanded, added SizedBox with width if needed
+                      width: 80, // Adjust width as needed
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                selectedIndexColor=index;
+                              });
+                              widget.onColorSelected(index);
+
+
+                            },
+
+                            child: CircleAvatar(
+                              backgroundColor: availableColors[index],
+                              radius: 20,
+                              child:
+                              index==selectedIndexColor? Icon(Icons.check, color: Colors.white,):null
+
+                            //  Icon(Icons.check, color: Colors.white,),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Column(
+                            children: [
+                              Text(
+                                availableColorsTitle[index],
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.fontStyle20boldblack.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                               // overflow: TextOverflow.ellipsis, // Added overflow handling
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 10),
+                  itemCount: availableColors.length,
+                ),
               ),
+
+
             ],
           ),
         ),
 
 
-        // CustomBtn(
-        //   title: 'Create Task',
-        //  // icon:  Icons.add,
-        //   onTap: onTap,
-        // ),
+        SizedBox(
+        //  width: 100,
+          child: CustomBtn(
+            width: 100,
+            title: 'Create Task',
+            // icon:  Icons.add,
+            onTap: () {
+              widget.onColorSelected(selectedIndexColor); // Pass the selected index
+              if (widget.onTap != null) {
+                widget.onTap!();
+              }
+            },
+          ),
+        ),
       ],
     );
   }
 }
+
+List<Color> availableColors = [
+  Colors.blue,
+  Colors.orange,
+  Colors.red,
+];
+List<String> availableColorsTitle = ['Normal\n Task', 'Important\n Task', 'Critical\n Task'];

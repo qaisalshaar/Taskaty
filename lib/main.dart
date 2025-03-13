@@ -1,7 +1,43 @@
+// import 'package:flutter/material.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:taskatykais/taskaty_app.dart';
+//
+// import 'core/models/task_model.dart';
+//
+// void main()async {
+//   Hive.initFlutter ();
+//  Hive.registerAdapter(TaskModelAdapter());
+//
+// await  Hive.box('tasks');
+//
+//   runApp(const TaskatyApp());
+// }
+
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:taskatykais/taskaty_app.dart';
+import 'core/models/task_maneger.dart';
+import 'core/models/task_model.dart';
 
-void main() {
-  runApp(const TaskatyApp());
+void main()async  {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await  Hive.initFlutter();
+
+    Hive.registerAdapter(TaskModelAdapter());
+    await     Hive.openBox('tasks box');
+
+    //      if (Hive.isBoxOpen("tasks")) {
+    //   Hive.box("tasks").close();
+    // }else {
+    //        await Hive.initFlutter();
+    //        Hive.isBoxOpen("tasks");
+    // }
+
+    runApp(const TaskatyApp());
+  } catch (e) {
+    debugPrint('Error during initialization: $e');
+    // Optionally, show an error message to the user
+  }
 }
-
